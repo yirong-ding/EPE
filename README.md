@@ -1,71 +1,62 @@
-# Website Builder - Deployment Ready
+# EPE
 
-This React website is configured for deployment to GitHub Pages.
+A modern, interactive web application built with React and Vite.
 
-## 🚀 Quick Start
+## 🌐 Live Demo
 
-### Deploy to GitHub Pages (Recommended)
+Visit the live site: [https://DYR-0.github.io/EPE/]
 
-See **[DEPLOYMENT.md](./DEPLOYMENT.md)** for complete step-by-step instructions.
+## Screenshots
+   ![Screenshot](screenshot.png)
 
-**Quick version:**
-1. Create a new repository on GitHub
-2. Update `base` in `vite.config.ts` to match your repo name: `base: '/your-repo-name/'`
-3. Push this code to GitHub
-4. Enable GitHub Pages in repository settings (Source: GitHub Actions)
-5. Your site will be live at `https://YOUR_USERNAME.github.io/YOUR_REPO/`
+## ✨ Features
 
-### Run Locally
+- Modern, responsive design
+- Interactive user interface
+- Fast performance with Vite
+- Built with React 18
+
+## 🛠️ Technologies
+
+- **React** - UI framework
+- **Vite** - Build tool and dev server
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Styling
+- **Radix UI** - Accessible components
+
+## 💻 Local Development
+
+To run this project locally:
 
 ```bash
+# Install dependencies
 npm install
+
+# Start development server
 npm run dev
 ```
 
-Open http://localhost:3000
+The site will be available at `http://localhost:3000`
 
-## 📁 Project Structure
+## 🏗️ Build
 
-- `src/` - React components and application code
-- `public/` - Static assets
-- `.github/workflows/` - GitHub Actions deployment configuration
-- `vite.config.ts` - Vite configuration (update `base` path here!)
-
-## 🔧 Build
+To build for production:
 
 ```bash
 npm run build
 ```
 
-Output will be in the `build/` folder.
+## 📝 License
 
-## 📖 Full Documentation
+This project is open source and available under the MIT License.
 
-- [Complete Deployment Guide](./DEPLOYMENT.md)
-- [Original README](./README_ORIGINAL.md) - Original project documentation
+## 👤 Author
 
-## 🎯 Important Notes
-
-**Before deploying:**
-- ✅ Update `base` in `vite.config.ts` with your repository name
-- ✅ Create a GitHub repository
-- ✅ Enable GitHub Pages with "GitHub Actions" as source
-
-**After first deployment:**
-- Every push to `main` branch auto-deploys
-- Check Actions tab for deployment status
-
-## 🆘 Troubleshooting
-
-**Blank page?**
-→ Check `base` path in `vite.config.ts` matches your repo name exactly
-
-**Build fails?**
-→ Check Actions tab for error logs
-
-**Assets not loading?**
-→ Verify `base: '/repo-name/'` has correct format with slashes
+Qiuya Chen
+Yirong Ding
+Lihua Fu
+Zehong Wang
 
 ---
 
-Need help? See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed instructions.
+Made with ❤️ using Figma
