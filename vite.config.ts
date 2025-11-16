@@ -5,7 +5,7 @@ import path from 'path';
 export default defineConfig({
    //Update this base path to match your repository name
    //Format 'repository-name'
-  base '/EPE/',   //Use '.' for custom domain or update to 'your-repo-name'
+  base: '/EPE/',   //Use '.' for custom domain or update to 'your-repo-name'
   plugins [react()],
   resolve {
     extensions ['.js', '.jsx', '.ts', '.tsx', '.json'],
