@@ -35,9 +35,9 @@ const goalOptions = [
 ];
 
 const gradeOptions = [
-  { value: "elementary", label: "Elementary School (Grades 1-6)" },
-  { value: "middle", label: "Middle School (Grades 7-9)" },
-  { value: "high", label: "High School (Grades 10-12)" },
+  { value: "elementary", label: "Elementary School (Grades 1-5)" },
+  { value: "middle", label: "Middle School (Grades 6-8)" },
+  { value: "high", label: "High School (Grades 9-12)" },
   { value: "other", label: "Other" }
 ];
 
