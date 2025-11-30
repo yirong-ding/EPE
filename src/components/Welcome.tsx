@@ -1,7 +1,7 @@
 import { Button } from "./ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
-import { Leaf, TreePine, Droplet, Globe, Sparkles } from "lucide-react";
+import { Leaf, TreePine, Droplet, Globe, Sparkles, Lock, Trophy } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { Navigation } from "./Navigation";
 import { UserData } from "../utils/userDataManager";
@@ -9,11 +9,12 @@ import { UserData } from "../utils/userDataManager";
 interface WelcomeProps {
   onStart: () => void;
   onAccountClick: () => void;
+  onForumClick: () => void;
   hasCompletedSurvey: boolean;
   userData: UserData;
 }
 
-export function Welcome({ onStart, onAccountClick, hasCompletedSurvey, userData }: WelcomeProps) {
+export function Welcome({ onStart, onAccountClick, onForumClick, hasCompletedSurvey, userData }: WelcomeProps) {
   const { preferences, totalQuizzes, averageScore, achievements } = userData;
   
   const getPersonalizedGreeting = () => {
@@ -45,7 +46,14 @@ export function Welcome({ onStart, onAccountClick, hasCompletedSurvey, userData 
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
-      <Navigation onAccountClick={onAccountClick} showAccount={hasCompletedSurvey} />
+      <Navigation
+        onAccountClick={onAccountClick}
+        onForumClick={onForumClick}
+        showAccount={hasCompletedSurvey}
+        showForum={hasCompletedSurvey}
+        showHome={false}
+        currentPage="home"
+      />
       <div className="flex items-center justify-center p-4 min-h-[calc(100vh-4rem)]">
         <Card className="max-w-3xl w-full">
         <CardHeader className="text-center space-y-4">
@@ -70,7 +78,12 @@ export function Welcome({ onStart, onAccountClick, hasCompletedSurvey, userData 
               <Globe className="h-6 w-6 text-cyan-600 dark:text-cyan-400" />
             </div>
           </div>
-          <CardTitle className="text-3xl md:text-4xl">Environmental Knowledge Quiz</CardTitle>
+          <div className="mb-2">
+            <Badge variant="secondary" className="text-xs px-3 py-1">
+              🏠 Home Page
+            </Badge>
+          </div>
+          <CardTitle className="text-3xl md:text-4xl">Environmental Protection Education (EPE)</CardTitle>
           <CardDescription className="text-lg">
             {hasCompletedSurvey && preferences ? (
               <span className="flex items-center justify-center gap-2">
@@ -78,7 +91,7 @@ export function Welcome({ onStart, onAccountClick, hasCompletedSurvey, userData 
                 {getPersonalizedGreeting()}
               </span>
             ) : (
-              "Test your understanding of environmental protection and learn how to better protect our planet"
+              "Learn, Quiz, and Connect: Your comprehensive platform for environmental education and community engagement"
             )}
           </CardDescription>
         </CardHeader>
@@ -117,6 +130,57 @@ export function Welcome({ onStart, onAccountClick, hasCompletedSurvey, userData 
               )}
             </div>
           )}
+
+          {/* All Available Badges Section */}
+          <div className="p-4 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950 dark:to-pink-950 border-2 border-purple-200 dark:border-purple-800 rounded-lg">
+            <h4 className="mb-3 flex items-center gap-2">
+              <Trophy className="h-5 w-5 text-purple-600" />
+              All Available Achievements
+            </h4>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {achievements.map((achievement) => (
+                <div
+                  key={achievement.id}
+                  className={`p-3 rounded-lg border-2 transition-all ${
+                    achievement.unlocked
+                      ? 'bg-white dark:bg-gray-800 border-green-300 dark:border-green-700'
+                      : 'bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-700 opacity-70'
+                  }`}
+                >
+                  <div className="flex items-start gap-2">
+                    <div className="text-2xl">{achievement.unlocked ? achievement.icon : '🔒'}</div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1">
+                        <h5 className="text-sm font-semibold truncate">{achievement.title}</h5>
+                        {achievement.unlocked && <Sparkles className="h-3 w-3 text-yellow-500 shrink-0" />}
+                      </div>
+                      <p className="text-xs text-muted-foreground line-clamp-2">{achievement.description}</p>
+                      {!achievement.unlocked && (
+                        <div className="mt-1">
+                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <Lock className="h-3 w-3" />
+                            <span>{achievement.progress}/{achievement.requirement}</span>
+                          </div>
+                          <div className="mt-1 h-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-purple-500 transition-all"
+                              style={{ width: `${Math.min((achievement.progress / achievement.requirement) * 100, 100)}%` }}
+                            />
+                          </div>
+                        </div>
+                      )}
+                      {achievement.unlocked && achievement.unlockedDate && (
+                        <p className="text-xs text-green-600 dark:text-green-400 mt-1">
+                          Unlocked {new Date(achievement.unlockedDate).toLocaleDateString()}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
           <div className="grid sm:grid-cols-3 gap-4">
             <div className="text-center p-4 bg-muted rounded-lg">
               <div className="text-2xl mb-1">10</div>
@@ -132,18 +196,28 @@ export function Welcome({ onStart, onAccountClick, hasCompletedSurvey, userData 
             </div>
           </div>
           <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-            <h4 className="text-sm mb-2 text-blue-900 dark:text-blue-100">Quiz Instructions:</h4>
+            <h4 className="text-sm mb-2 text-blue-900 dark:text-blue-100 font-semibold">📝 About the Quiz:</h4>
             <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
-              <li>• 10 multiple-choice questions in total</li>
-              <li>• Each question has only one correct answer</li>
+              <li>• <strong>10 questions</strong> - Multiple-choice format with one correct answer each</li>
+              <li>• <strong>~5 minutes</strong> - Suggested completion time (complete faster for speed bonus!)</li>
               {hasCompletedSurvey && preferences ? (
-                <li>• ✨ Questions personalized based on your interests and experience level</li>
+                <li>• <strong>✨ Personalized</strong> - Questions tailored to your interests and experience level</li>
               ) : (
-                <li>• Questions cover various environmental topics</li>
+                <li>• <strong>Diverse topics</strong> - Questions cover various environmental protection themes</li>
               )}
-              <li>• After completion, your score and environmental tips will be displayed</li>
-              <li>• You can retake the quiz at any time</li>
+              <li>• <strong>Instant feedback</strong> - Get your score and personalized environmental tips</li>
+              <li>• <strong>Unlimited attempts</strong> - Retake the quiz anytime to improve your knowledge</li>
             </ul>
+          </div>
+
+          <div className="bg-emerald-50 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800 rounded-lg p-4">
+            <h4 className="text-sm mb-2 text-emerald-900 dark:text-emerald-100 font-semibold">🌟 Platform Features:</h4>
+            <div className="grid sm:grid-cols-2 gap-2 text-sm text-emerald-800 dark:text-emerald-200">
+              <div>• <strong>Learning Dashboard:</strong> Track your progress and achievements</div>
+              <div>• <strong>Community Forum:</strong> Discuss environmental topics with others</div>
+              <div>• <strong>Personalized Content:</strong> Get customized learning recommendations</div>
+              <div>• <strong>Achievement System:</strong> Unlock badges as you learn and improve</div>
+            </div>
           </div>
           <Button 
             onClick={onStart} 

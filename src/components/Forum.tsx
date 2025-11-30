@@ -6,31 +6,98 @@ import { Input } from "./ui/input";
 import { Badge } from "./ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
-import { 
-  MessageSquare, 
-  ThumbsUp, 
-  Eye, 
-  Send, 
+import {
+  MessageSquare,
+  ThumbsUp,
+  Eye,
+  Send,
   TrendingUp,
   Clock,
   ArrowLeft,
-  Leaf
+  Leaf,
+  AlertCircle,
+  Sparkles
 } from "lucide-react";
 import { forumPosts as initialPosts, ForumPost, Comment } from "../data/forumData";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { toast } from "sonner@2.0.3";
+
+// Sensitive words filter - expandable list for content moderation
+const SENSITIVE_WORDS = [
+  'spam', 'scam', 'hate', 'abuse', 'violence', 'offensive',
+  // Add more words as needed for content moderation
+];
+
+const containsSensitiveWords = (text: string): boolean => {
+  const lowerText = text.toLowerCase();
+  return SENSITIVE_WORDS.some(word => lowerText.includes(word));
+};
+
+const filterSensitiveWords = (text: string): string => {
+  let filtered = text;
+  SENSITIVE_WORDS.forEach(word => {
+    const regex = new RegExp(word, 'gi');
+    filtered = filtered.replace(regex, '*'.repeat(word.length));
+  });
+  return filtered;
+};
+
+import { UserData } from "../utils/userDataManager";
 
 interface ForumProps {
   onBack: () => void;
+  userData?: UserData;
 }
 
-export function Forum({ onBack }: ForumProps) {
+export function Forum({ onBack, userData }: ForumProps) {
   const [posts, setPosts] = useState<ForumPost[]>(initialPosts);
   const [selectedPost, setSelectedPost] = useState<ForumPost | null>(null);
   const [newComment, setNewComment] = useState("");
-  const [sortBy, setSortBy] = useState<"hot" | "recent">("hot");
+  const [sortBy, setSortBy] = useState<"hot" | "recent" | "personalized">("hot");
+
+  // Get interest label for display
+  const getInterestLabel = (interest: string): string => {
+    const labels: Record<string, string> = {
+      recycling: "Waste Sorting & Recycling",
+      energy: "Energy Conservation",
+      water: "Water Resource Protection",
+      biodiversity: "Biodiversity",
+      sustainable: "Sustainable Lifestyle",
+      climate: "Climate Change"
+    };
+    return labels[interest] || interest;
+  };
+
+  // Map user interests to related forum tags
+  const getRelatedTags = (interests: string[]): string[] => {
+    const tagMap: Record<string, string[]> = {
+      recycling: ["Zero Waste", "Recycling", "DIY Crafts"],
+      energy: ["New Energy", "Carbon Emissions"],
+      water: ["Ocean Protection", "Water Conservation"],
+      biodiversity: ["Wildlife", "Biodiversity", "Nature"],
+      sustainable: ["Sustainable Living", "Urban Agriculture", "Lifestyle"],
+      climate: ["Climate Change", "Carbon Emissions"]
+    };
+
+    const related: string[] = [];
+    interests.forEach(interest => {
+      if (tagMap[interest]) {
+        related.push(...tagMap[interest]);
+      }
+    });
+    return [...new Set(related)]; // Remove duplicates
+  };
 
   const sortedPosts = [...posts].sort((a, b) => {
-    if (sortBy === "hot") {
+    if (sortBy === "personalized" && userData?.preferences) {
+      // Score posts based on tag relevance to user interests
+      const relatedTags = getRelatedTags(userData.preferences.interests);
+      const scoreA = a.tags.filter(tag => relatedTags.includes(tag)).length;
+      const scoreB = b.tags.filter(tag => relatedTags.includes(tag)).length;
+      if (scoreB !== scoreA) return scoreB - scoreA;
+      // If same relevance, sort by engagement
+      return (b.likes + b.views / 10) - (a.likes + a.views / 10);
+    } else if (sortBy === "hot") {
       return (b.likes + b.views / 10) - (a.likes + a.views / 10);
     } else {
       return 0; // Already sorted by time
@@ -39,6 +106,15 @@ export function Forum({ onBack }: ForumProps) {
 
   const handleAddComment = () => {
     if (!newComment.trim() || !selectedPost) return;
+
+    // Check for sensitive words
+    if (containsSensitiveWords(newComment)) {
+      toast.error("Comment contains inappropriate content", {
+        description: "Please revise your comment to maintain a safe and respectful forum environment.",
+        duration: 4000,
+      });
+      return;
+    }
 
     const comment: Comment = {
       id: Date.now(),
@@ -65,6 +141,7 @@ export function Forum({ onBack }: ForumProps) {
       comments: [...selectedPost.comments, comment]
     });
     setNewComment("");
+    toast.success("Comment posted successfully!");
   };
 
   const handleLikePost = (postId: number) => {
@@ -228,8 +305,11 @@ export function Forum({ onBack }: ForumProps) {
               <Leaf className="h-6 w-6 text-green-600 dark:text-green-400" />
             </div>
             <div>
+              <Badge variant="secondary" className="text-xs px-3 py-1 mb-2">
+                💬 Community Forum
+              </Badge>
               <h1 className="text-3xl">Environmental Forum</h1>
-              <p className="text-muted-foreground">Share environmental experiences, exchange green living ideas</p>
+              <p className="text-muted-foreground">Connect with others, share environmental experiences, and discuss green living ideas</p>
             </div>
           </div>
           <Button variant="outline" onClick={onBack}>
@@ -250,8 +330,8 @@ export function Forum({ onBack }: ForumProps) {
           </CardHeader>
         </Card>
 
-        <Tabs value={sortBy} onValueChange={(v) => setSortBy(v as "hot" | "recent")}>
-          <TabsList className="grid w-full max-w-md grid-cols-2">
+        <Tabs value={sortBy} onValueChange={(v) => setSortBy(v as "hot" | "recent" | "personalized")}>
+          <TabsList className={`grid w-full max-w-md ${userData?.preferences ? 'grid-cols-3' : 'grid-cols-2'}`}>
             <TabsTrigger value="hot" className="gap-2">
               <TrendingUp className="h-4 w-4" />
               Hot
@@ -260,7 +340,22 @@ export function Forum({ onBack }: ForumProps) {
               <Clock className="h-4 w-4" />
               Recent
             </TabsTrigger>
+            {userData?.preferences && (
+              <TabsTrigger value="personalized" className="gap-2">
+                <Sparkles className="h-4 w-4" />
+                For You
+              </TabsTrigger>
+            )}
           </TabsList>
+
+          {sortBy === "personalized" && userData?.preferences && (
+            <div className="mt-4 p-3 bg-purple-50 dark:bg-purple-950 border border-purple-200 dark:border-purple-800 rounded-lg">
+              <p className="text-sm text-purple-900 dark:text-purple-100 flex items-center gap-2">
+                <Sparkles className="h-4 w-4" />
+                Showing posts personalized based on your interests: {userData.preferences.interests.map(i => getInterestLabel(i)).join(", ")}
+              </p>
+            </div>
+          )}
 
           <TabsContent value={sortBy} className="space-y-4 mt-6">
             {sortedPosts.map((post) => (

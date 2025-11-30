@@ -113,10 +113,16 @@ export function Account({ userData, onBack }: AccountProps) {
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 p-4 py-8">
       <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl flex items-center gap-3">
-            <User className="h-8 w-8" />
-            My Account
-          </h1>
+          <div>
+            <Badge variant="secondary" className="text-xs px-3 py-1 mb-2">
+              👤 Personal Dashboard
+            </Badge>
+            <h1 className="text-3xl flex items-center gap-3">
+              <User className="h-8 w-8" />
+              My Account
+            </h1>
+            <p className="text-muted-foreground mt-1">Track your learning progress, achievements, and preferences</p>
+          </div>
           <Button variant="outline" onClick={onBack}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
@@ -246,10 +252,14 @@ export function Account({ userData, onBack }: AccountProps) {
                   </Badge>
                 </div>
                 <div>
-                  <h4 className="mb-2">Learning Goal</h4>
-                  <Badge className="bg-green-500 text-white">
-                    {getGoalLabel(preferences.goal)}
-                  </Badge>
+                  <h4 className="mb-2">Learning Goals</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {preferences.goals.map((goal, index) => (
+                      <Badge key={index} className="bg-green-500 text-white">
+                        {getGoalLabel(goal)}
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
                 {preferences.grade && (
                   <div>
@@ -300,10 +310,14 @@ export function Account({ userData, onBack }: AccountProps) {
                       </Badge>
                     </div>
                     <div>
-                      <h4 className="mb-2">Learning Goal</h4>
-                      <Badge className="bg-green-500 text-white">
-                        {getGoalLabel(preferences.goal)}
-                      </Badge>
+                      <h4 className="mb-2">Learning Goals</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {preferences.goals.map((goal, index) => (
+                          <Badge key={index} className="bg-green-500 text-white">
+                            {getGoalLabel(goal)}
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
                     {preferences.grade && (
                       <div>

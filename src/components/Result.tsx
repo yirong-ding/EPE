@@ -87,12 +87,19 @@ export function Result({ score, totalQuestions, answers, questions, onRestart, o
     }
 
     // Adjust recommendations based on learning goals
-    if (preferences.goal === "practice") {
+    if (preferences.goals.includes("practice")) {
       tips.push("Apply what you've learned to daily life");
       tips.push("Record your environmental practices and form good habits");
-    } else if (preferences.goal === "share") {
+    }
+    if (preferences.goals.includes("share")) {
       tips.push("Share your environmental experiences in the forum");
       tips.push("Motivate people around you to participate in environmental actions");
+    }
+    if (preferences.goals.includes("challenge")) {
+      tips.push("Take more quizzes to challenge yourself and test your knowledge");
+    }
+    if (preferences.goals.includes("learn")) {
+      tips.push("Explore additional environmental topics to broaden your knowledge");
     }
 
     // Provide recommendations based on quiz performance
@@ -139,6 +146,9 @@ export function Result({ score, totalQuestions, answers, questions, onRestart, o
       <div className="max-w-4xl mx-auto space-y-6">
         <Card className="text-center">
           <CardHeader>
+            <Badge variant="secondary" className="text-xs px-3 py-1 mb-3">
+              🎯 Quiz Results & Feedback
+            </Badge>
             <div className="mx-auto w-full max-w-md h-48 rounded-lg overflow-hidden mb-4">
               <ImageWithFallback
                 src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlYXJ0aCUyMHBsYW5ldCUyMHN1c3RhaW5hYmlsaXR5fGVufDF8fHx8MTc2MDY0NTY5N3ww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
@@ -304,6 +314,15 @@ export function Result({ score, totalQuestions, answers, questions, onRestart, o
                           <div className="text-sm text-muted-foreground mb-1">Explanation:</div>
                           <div className="text-sm">{question.explanation}</div>
                         </div>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={onGoToForum}
+                          className="mt-2 gap-2"
+                        >
+                          <MessageSquare className="h-4 w-4" />
+                          Discuss this question in the forum
+                        </Button>
                       </div>
                     </div>
                   </div>

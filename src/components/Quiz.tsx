@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Progress } from "./ui/progress";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { Label } from "./ui/label";
-import { ChevronRight, ChevronLeft, CheckCircle, XCircle, Lightbulb } from "lucide-react";
+import { ChevronRight, ChevronLeft, CheckCircle, XCircle, Lightbulb, Clock } from "lucide-react";
 
 interface Question {
   id: number;
@@ -26,10 +26,34 @@ export function Quiz({ questions, onComplete }: QuizProps) {
   );
   const [selectedOption, setSelectedOption] = useState<string>("");
   const [showExplanation, setShowExplanation] = useState(false);
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
 
   const progress = ((currentQuestion + 1) / questions.length) * 100;
   const question = questions[currentQuestion];
   const hasAnswered = selectedAnswers[currentQuestion] !== null;
+
+  // Timer effect - updates every second
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setElapsedSeconds(prev => prev + 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  // Format time display (MM:SS)
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  // Determine timer color based on elapsed time
+  const getTimerColor = () => {
+    if (elapsedSeconds < 180) return "text-green-600"; // < 3 min (Speed Master)
+    if (elapsedSeconds < 300) return "text-yellow-600"; // < 5 min (Suggested)
+    return "text-orange-600"; // > 5 min
+  };
 
   const handleOptionChange = (value: string) => {
     if (hasAnswered) return; // Can't change answer once submitted
@@ -89,16 +113,39 @@ export function Quiz({ questions, onComplete }: QuizProps) {
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4 py-8">
       <Card className="max-w-3xl w-full">
         <CardHeader>
+          <Badge variant="secondary" className="text-xs px-3 py-1 mb-3 w-fit">
+            📝 Interactive Quiz
+          </Badge>
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <CardTitle className="text-xl">
                 Question {currentQuestion + 1} of {questions.length}
               </CardTitle>
-              <div className="text-sm text-muted-foreground">
-                {selectedAnswers.filter(a => a !== null).length}/{questions.length} Answered
+              <div className="flex items-center gap-4">
+                <div className="text-sm text-muted-foreground">
+                  {selectedAnswers.filter(a => a !== null).length}/{questions.length} Answered
+                </div>
+                <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border-2 ${
+                  elapsedSeconds < 180
+                    ? 'bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800'
+                    : elapsedSeconds < 300
+                    ? 'bg-yellow-50 border-yellow-200 dark:bg-yellow-950 dark:border-yellow-800'
+                    : 'bg-orange-50 border-orange-200 dark:bg-orange-950 dark:border-orange-800'
+                }`}>
+                  <Clock className={`h-4 w-4 ${getTimerColor()}`} />
+                  <span className={`font-mono text-sm font-semibold ${getTimerColor()}`}>
+                    {formatTime(elapsedSeconds)}
+                  </span>
+                </div>
               </div>
             </div>
-            <Progress value={progress} className="h-2" />
+            <div className="space-y-2">
+              <Progress value={progress} className="h-2" />
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>Progress: {Math.round(progress)}%</span>
+                <span>Suggested time: 5 min {elapsedSeconds < 180 && '⚡ (Speed bonus: < 3 min)'}</span>
+              </div>
+            </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">

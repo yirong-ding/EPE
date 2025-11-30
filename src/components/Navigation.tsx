@@ -1,13 +1,26 @@
 import { Button } from "./ui/button";
 import { Avatar, AvatarFallback } from "./ui/avatar";
-import { Leaf, User } from "lucide-react";
+import { Leaf, User, MessageSquare, Home } from "lucide-react";
 
 interface NavigationProps {
-  onAccountClick: () => void;
+  onAccountClick?: () => void;
+  onForumClick?: () => void;
+  onHomeClick?: () => void;
   showAccount?: boolean;
+  showForum?: boolean;
+  showHome?: boolean;
+  currentPage?: string;
 }
 
-export function Navigation({ onAccountClick, showAccount = true }: NavigationProps) {
+export function Navigation({
+  onAccountClick,
+  onForumClick,
+  onHomeClick,
+  showAccount = true,
+  showForum = true,
+  showHome = false,
+  currentPage = "home"
+}: NavigationProps) {
   return (
     <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur border-b">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -16,20 +29,45 @@ export function Navigation({ onAccountClick, showAccount = true }: NavigationPro
             <Leaf className="h-5 w-5 text-green-600 dark:text-green-400" />
           </div>
           <div>
-            <h2 className="text-lg">Environmental Quiz</h2>
+            <h2 className="text-lg font-semibold">EPE Platform</h2>
+            <p className="text-xs text-muted-foreground">Environmental Protection Education</p>
           </div>
         </div>
-        {showAccount && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onAccountClick}
-            className="gap-2"
-          >
-            <User className="h-4 w-4" />
-            My Account
-          </Button>
-        )}
+        <div className="flex items-center gap-2">
+          {showHome && onHomeClick && (
+            <Button
+              variant={currentPage === "home" ? "default" : "ghost"}
+              size="sm"
+              onClick={onHomeClick}
+              className="gap-2"
+            >
+              <Home className="h-4 w-4" />
+              <span className="hidden sm:inline">Home</span>
+            </Button>
+          )}
+          {showForum && onForumClick && (
+            <Button
+              variant={currentPage === "forum" ? "default" : "ghost"}
+              size="sm"
+              onClick={onForumClick}
+              className="gap-2"
+            >
+              <MessageSquare className="h-4 w-4" />
+              <span className="hidden sm:inline">Forum</span>
+            </Button>
+          )}
+          {showAccount && onAccountClick && (
+            <Button
+              variant={currentPage === "account" ? "default" : "ghost"}
+              size="sm"
+              onClick={onAccountClick}
+              className="gap-2"
+            >
+              <User className="h-4 w-4" />
+              <span className="hidden sm:inline">Account</span>
+            </Button>
+          )}
+        </div>
       </div>
     </nav>
   );
