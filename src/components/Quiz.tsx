@@ -28,6 +28,22 @@ export function Quiz({ questions, onComplete }: QuizProps) {
   const [showExplanation, setShowExplanation] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
 
+  // Safety check for empty questions
+  if (!questions || questions.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <Card className="max-w-md">
+          <CardHeader>
+            <CardTitle>No Questions Available</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p>Sorry, there are no questions available at this time.</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   const progress = ((currentQuestion + 1) / questions.length) * 100;
   const question = questions[currentQuestion];
   const hasAnswered = selectedAnswers[currentQuestion] !== null;

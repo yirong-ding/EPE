@@ -30,6 +30,23 @@ interface AccountProps {
 export function Account({ userData, onBack }: AccountProps) {
   const { preferences, quizHistory, totalQuizzes, bestScore, averageScore, totalTimeSpent, joinDate, achievements } = userData;
 
+  // Safety check for preferences
+  if (!preferences) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-green-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 p-4">
+        <Card className="max-w-md mx-auto mt-20">
+          <CardHeader>
+            <CardTitle>Complete Your Profile</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="mb-4">Please complete the preference survey first to access your account.</p>
+            <Button onClick={onBack}>Go Back</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   const getExperienceLabel = (exp: string) => {
     const labels: Record<string, string> = {
       beginner: "Beginner",
