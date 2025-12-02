@@ -54,7 +54,7 @@ export function Welcome({ onStart, onAccountClick, onForumClick, hasCompletedSur
         showHome={false}
         currentPage="home"
       />
-      <div className="flex items-center justify-center p-4 pt-20 min-h-screen">
+      <div className="flex items-center justify-center p-4 min-h-[calc(100vh-4rem)]">
         <Card className="max-w-3xl w-full">
         <CardHeader className="text-center space-y-4">
           <div className="mx-auto w-full h-48 rounded-lg overflow-hidden mb-4">
