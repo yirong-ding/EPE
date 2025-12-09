@@ -89,12 +89,19 @@ export function Result({ score, totalQuestions, answers, questions, onRestart, o
     }
 
     // Adjust recommendations based on learning goals
-    if (preferences.goal === "practice") {
+    if (preferences.goals.includes("practice")) {
       tips.push("Apply what you've learned to daily life");
       tips.push("Record your environmental practices and form good habits");
-    } else if (preferences.goal === "share") {
+    }
+    if (preferences.goals.includes("share")) {
       tips.push("Share your environmental experiences in the forum");
       tips.push("Motivate people around you to participate in environmental actions");
+    }
+    if (preferences.goals.includes("learn")) {
+      tips.push("Continue exploring new environmental topics to expand your knowledge");
+    }
+    if (preferences.goals.includes("challenge")) {
+      tips.push("Try taking quizzes on topics you're less familiar with");
     }
 
     // Provide recommendations based on quiz performance

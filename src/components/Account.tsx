@@ -249,10 +249,14 @@ export function Account({ userData, onBack }: AccountProps) {
                   </Badge>
                 </div>
                 <div>
-                  <h4 className="mb-2">Learning Goal</h4>
-                  <Badge className="bg-green-500 text-white">
-                    {getGoalLabel(preferences.goal)}
-                  </Badge>
+                  <h4 className="mb-2">Learning Goals</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {preferences.goals.map((goal, index) => (
+                      <Badge key={index} className="bg-green-500 text-white">
+                        {getGoalLabel(goal)}
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
                 {preferences.grade && (
                   <div>
@@ -303,10 +307,14 @@ export function Account({ userData, onBack }: AccountProps) {
                       </Badge>
                     </div>
                     <div>
-                      <h4 className="mb-2">Learning Goal</h4>
-                      <Badge className="bg-green-500 text-white">
-                        {getGoalLabel(preferences.goal)}
-                      </Badge>
+                      <h4 className="mb-2">Learning Goals</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {preferences.goals.map((goal, index) => (
+                          <Badge key={index} className="bg-green-500 text-white">
+                            {getGoalLabel(goal)}
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
                     {preferences.grade && (
                       <div>
