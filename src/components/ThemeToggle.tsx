@@ -4,6 +4,10 @@ import { useEffect, useState } from "react";
 
 export function ThemeToggle() {
   const [theme, setTheme] = useState<"light" | "dark">(() => {
+    // Check if we're in a browser environment
+    if (typeof window === "undefined") {
+      return "light";
+    }
     // Check localStorage first
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme === "dark" || savedTheme === "light") {
@@ -17,6 +21,10 @@ export function ThemeToggle() {
   });
 
   useEffect(() => {
+    // Check if we're in a browser environment
+    if (typeof window === "undefined") {
+      return;
+    }
     // Apply theme to document
     if (theme === "dark") {
       document.documentElement.classList.add("dark");

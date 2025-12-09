@@ -4,8 +4,22 @@ import { Leaf, User } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 
 interface NavigationProps {
+  /**
+   * Callback to navigate to the Account page.
+   * If not provided, the Account button will not be shown.
+   */
   onAccountClick?: () => void;
+  /**
+   * Whether to show the Account button.
+   * Only takes effect if onAccountClick is also provided.
+   * @default true
+   */
   showAccount?: boolean;
+  /**
+   * Whether the current page is the Account page.
+   * When true, the Account button will be highlighted/active.
+   * @default false
+   */
   isAccountPage?: boolean;
 }
 
