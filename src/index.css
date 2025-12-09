@@ -2163,6 +2163,29 @@
       color: var(--accent-foreground);
     }
   }
+
+  /* Mobile responsive utilities */
+  .hidden {
+    display: none;
+  }
+
+  @media (width >= 40rem) {
+    .sm\:inline {
+      display: inline;
+    }
+
+    .sm\:hidden {
+      display: none;
+    }
+
+    .sm\:block {
+      display: block;
+    }
+
+    .sm\:flex {
+      display: flex;
+    }
+  }
 }
 
 :root {
