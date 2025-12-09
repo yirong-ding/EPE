@@ -1,13 +1,29 @@
 import { Button } from "./ui/button";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { Leaf, User } from "lucide-react";
+import { ThemeToggle } from "./ThemeToggle";
 
 interface NavigationProps {
-  onAccountClick: () => void;
+  /**
+   * Callback to navigate to the Account page.
+   * If not provided, the Account button will not be shown.
+   */
+  onAccountClick?: () => void;
+  /**
+   * Whether to show the Account button.
+   * Only takes effect if onAccountClick is also provided.
+   * @default true
+   */
   showAccount?: boolean;
+  /**
+   * Whether the current page is the Account page.
+   * When true, the Account button will be highlighted/active.
+   * @default false
+   */
+  isAccountPage?: boolean;
 }
 
-export function Navigation({ onAccountClick, showAccount = true }: NavigationProps) {
+export function Navigation({ onAccountClick, showAccount = true, isAccountPage = false }: NavigationProps) {
   return (
     <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur border-b">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -19,17 +35,20 @@ export function Navigation({ onAccountClick, showAccount = true }: NavigationPro
             <h2 className="text-lg">Environmental Quiz</h2>
           </div>
         </div>
-        {showAccount && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onAccountClick}
-            className="gap-2"
-          >
-            <User className="h-4 w-4" />
-            My Account
-          </Button>
-        )}
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          {showAccount && onAccountClick && (
+            <Button
+              variant={isAccountPage ? "secondary" : "ghost"}
+              size="sm"
+              onClick={onAccountClick}
+              className="gap-2"
+            >
+              <User className="h-4 w-4" />
+              <span className="hidden sm:inline">My Account</span>
+            </Button>
+          )}
+        </div>
       </div>
     </nav>
   );

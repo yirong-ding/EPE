@@ -5,6 +5,7 @@ import { Progress } from "./ui/progress";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { Label } from "./ui/label";
 import { ChevronRight, ChevronLeft, CheckCircle, XCircle, Lightbulb } from "lucide-react";
+import { Navigation } from "./Navigation";
 
 interface Question {
   id: number;
@@ -17,9 +18,10 @@ interface Question {
 interface QuizProps {
   questions: Question[];
   onComplete: (score: number, answers: number[]) => void;
+  onAccountClick: () => void;
 }
 
-export function Quiz({ questions, onComplete }: QuizProps) {
+export function Quiz({ questions, onComplete, onAccountClick }: QuizProps) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<(number | null)[]>(
     new Array(questions.length).fill(null)
@@ -86,8 +88,10 @@ export function Quiz({ questions, onComplete }: QuizProps) {
   const isCorrect = hasAnswered && selectedAnswers[currentQuestion] === question.correctAnswer;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4 py-8">
-      <Card className="max-w-3xl w-full">
+    <div className="min-h-screen bg-gradient-to-b from-green-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
+      <Navigation onAccountClick={onAccountClick} showAccount={true} isAccountPage={false} />
+      <div className="flex items-center justify-center p-4 py-8">
+        <Card className="max-w-3xl w-full">
         <CardHeader>
           <div className="space-y-4">
             <div className="flex justify-between items-center">
@@ -227,6 +231,7 @@ export function Quiz({ questions, onComplete }: QuizProps) {
           </div>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }

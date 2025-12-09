@@ -18,12 +18,14 @@ import {
 } from "lucide-react";
 import { forumPosts as initialPosts, ForumPost, Comment } from "../data/forumData";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { Navigation } from "./Navigation";
 
 interface ForumProps {
   onBack: () => void;
+  onAccountClick: () => void;
 }
 
-export function Forum({ onBack }: ForumProps) {
+export function Forum({ onBack, onAccountClick }: ForumProps) {
   const [posts, setPosts] = useState<ForumPost[]>(initialPosts);
   const [selectedPost, setSelectedPost] = useState<ForumPost | null>(null);
   const [newComment, setNewComment] = useState("");
@@ -104,8 +106,10 @@ export function Forum({ onBack }: ForumProps) {
 
   if (selectedPost) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-green-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 p-4 py-8">
-        <div className="max-w-4xl mx-auto space-y-6">
+      <div className="min-h-screen bg-gradient-to-b from-green-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
+        <Navigation onAccountClick={onAccountClick} showAccount={true} isAccountPage={false} />
+        <div className="p-4 py-8">
+          <div className="max-w-4xl mx-auto space-y-6">
           <Button
             variant="ghost"
             onClick={() => setSelectedPost(null)}
@@ -215,13 +219,16 @@ export function Forum({ onBack }: ForumProps) {
             </CardContent>
           </Card>
         </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 p-4 py-8">
-      <div className="max-w-6xl mx-auto space-y-6">
+    <div className="min-h-screen bg-gradient-to-b from-green-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
+      <Navigation onAccountClick={onAccountClick} showAccount={true} isAccountPage={false} />
+      <div className="p-4 py-8">
+        <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
@@ -319,6 +326,7 @@ export function Forum({ onBack }: ForumProps) {
             ))}
           </TabsContent>
         </Tabs>
+      </div>
       </div>
     </div>
   );

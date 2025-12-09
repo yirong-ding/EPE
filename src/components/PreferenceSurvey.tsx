@@ -7,6 +7,7 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { ChevronRight, Leaf } from "lucide-react";
 import { UserPreferences } from "../utils/userDataManager";
+import { Navigation } from "./Navigation";
 
 interface PreferenceSurveyProps {
   onComplete: (preferences: UserPreferences) => void;
@@ -83,8 +84,10 @@ export function PreferenceSurvey({ onComplete }: PreferenceSurveyProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
-      <Card className="max-w-2xl w-full">
+    <div className="min-h-screen bg-gradient-to-b from-green-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
+      <Navigation showAccount={false} />
+      <div className="flex items-center justify-center p-4 py-8">
+        <Card className="max-w-2xl w-full">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
             <div className="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center">
@@ -289,6 +292,7 @@ export function PreferenceSurvey({ onComplete }: PreferenceSurveyProps) {
           </div>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }

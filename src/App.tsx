@@ -115,7 +115,7 @@ export default function App() {
         />
       )}
       {currentPage === "quiz" && (
-        <Quiz questions={selectedQuestions} onComplete={handleComplete} />
+        <Quiz questions={selectedQuestions} onComplete={handleComplete} onAccountClick={handleGoToAccount} />
       )}
       {currentPage === "result" && (
         <Result
@@ -126,9 +126,10 @@ export default function App() {
           onRestart={handleRestart}
           onGoToForum={handleGoToForum}
           userData={userData}
+          onAccountClick={handleGoToAccount}
         />
       )}
-      {currentPage === "forum" && <Forum onBack={handleBackFromForum} />}
+      {currentPage === "forum" && <Forum onBack={handleBackFromForum} onAccountClick={handleGoToAccount} />}
       {currentPage === "account" && (
         <Account userData={userData} onBack={handleBackFromAccount} />
       )}
