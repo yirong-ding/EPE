@@ -45,7 +45,7 @@ export function Welcome({ onStart, onAccountClick, hasCompletedSurvey, userData 
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
-      <Navigation onAccountClick={onAccountClick} showAccount={hasCompletedSurvey} />
+      <Navigation onAccountClick={onAccountClick} showAccount={hasCompletedSurvey} isAccountPage={false} />
       <div className="flex items-center justify-center p-4 min-h-[calc(100vh-4rem)]">
         <Card className="max-w-3xl w-full">
         <CardHeader className="text-center space-y-4">

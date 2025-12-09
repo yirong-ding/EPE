@@ -21,6 +21,7 @@ import {
 import { UserData } from "../utils/userDataManager";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Legend } from 'recharts';
+import { Navigation } from "./Navigation";
 
 interface AccountProps {
   userData: UserData;
@@ -110,8 +111,10 @@ export function Account({ userData, onBack }: AccountProps) {
   const lockedAchievements = achievements.filter(a => !a.unlocked);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 p-4 py-8">
-      <div className="max-w-6xl mx-auto space-y-6">
+    <div className="min-h-screen bg-gradient-to-b from-green-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
+      <Navigation onAccountClick={onBack} showAccount={true} isAccountPage={true} />
+      <div className="p-4 py-8">
+        <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl flex items-center gap-3">
             <User className="h-8 w-8" />
@@ -570,6 +573,7 @@ export function Account({ userData, onBack }: AccountProps) {
             </Card>
           </TabsContent>
         </Tabs>
+      </div>
       </div>
     </div>
   );

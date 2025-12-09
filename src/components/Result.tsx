@@ -4,6 +4,7 @@ import { Badge } from "./ui/badge";
 import { Trophy, Leaf, CheckCircle, XCircle, RotateCcw, MessageSquare, Sparkles, TrendingUp } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { UserData } from "../utils/userDataManager";
+import { Navigation } from "./Navigation";
 
 interface Question {
   id: number;
@@ -21,9 +22,10 @@ interface ResultProps {
   onRestart: () => void;
   onGoToForum: () => void;
   userData: UserData;
+  onAccountClick: () => void;
 }
 
-export function Result({ score, totalQuestions, answers, questions, onRestart, onGoToForum, userData }: ResultProps) {
+export function Result({ score, totalQuestions, answers, questions, onRestart, onGoToForum, userData, onAccountClick }: ResultProps) {
   const percentage = (score / (totalQuestions * 10)) * 100;
   
   const getLevel = () => {
@@ -135,8 +137,10 @@ export function Result({ score, totalQuestions, answers, questions, onRestart, o
   const newAchievements = getNewlyUnlockedAchievements();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 p-4 py-8">
-      <div className="max-w-4xl mx-auto space-y-6">
+    <div className="min-h-screen bg-gradient-to-b from-green-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
+      <Navigation onAccountClick={onAccountClick} showAccount={true} isAccountPage={false} />
+      <div className="p-4 py-8">
+        <div className="max-w-4xl mx-auto space-y-6">
         <Card className="text-center">
           <CardHeader>
             <div className="mx-auto w-full max-w-md h-48 rounded-lg overflow-hidden mb-4">
@@ -312,6 +316,7 @@ export function Result({ score, totalQuestions, answers, questions, onRestart, o
             })}
           </CardContent>
         </Card>
+      </div>
       </div>
     </div>
   );
